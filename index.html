@@ -1,0 +1,60 @@
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Tumblr Arena Migration Tool ⛵️</title>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="./index.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre.min.css">
+  </head>
+  <body>
+    <div class="m-2">
+      <form class="form-group" id="migration_form">
+        <div class="columns mt-2 mb-2">
+          <h6 class="col-mx-auto mt-2 mb-2">Use this tool to migrate your Tumblr blog to an Arena channel.</h6>
+        </div>
+        <div class="columns">
+          <div class="column col-4 col-ml-auto">
+            <div class="card">
+              <div class="card-body">
+                <p>Go to <a href="https://www.tumblr.com/settings/apps">https://www.tumblr.com/settings/apps</a> and create a Tumblr application and fill out the information here.</p>
+                <label class="form-label" for="input_tumblr_api_key">Tumblr API Key</label>
+                <input class="form-input" type="text" id="input_tumblr_api_key" placeholder="Tumblr API Key">
+                <label class="form-label" for="input_tumblr_blog_name">Tumblr Blog Name</label>
+                <input class="form-input" type="text" id="input_tumblr_blog_name" placeholder="Tumblr Blog Name">
+              </div>
+            </div>
+          </div>
+          <div class="column col-4 col-mr-auto">
+            <div class="card">
+              <div class="card-body">
+                <p>Go to <a href="https://dev.are.na/oauth/applications">https://dev.are.na/oauth/applications</a> and create a Arena application and fill out the information here.</p>
+                <label class="form-label" for="input_arena_api_key">Arena API Key</label>
+                <input class="form-input" type="text" id="input_arena_api_key" placeholder="Arena API Key">
+                <label class="form-label" for="input_arena_access_token">Arena Access Token</label>
+                <input class="form-input" type="text" id="input_arena_access_token" placeholder="Arena Access Token">
+                <label class="form-label" for="input_arena_channel_name">Arena Channel Name</label>
+                <input class="form-input" type="text" id="input_arena_channel_name" placeholder="Arena Channel Name">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="columns mt-2">
+          <div class="column col-1 col-mx-auto docs-block mt-2">
+            <input type="submit" class="btn btn-primary input-group-btn"></input>
+          </div>
+        </div>
+        <div class="modal" id="loading_modal">
+          <div class="modal-body">
+            <div class="modal-container">
+              <div class="content mt-2">
+                <div class="loading loading-lg"></div>
+                <p class="mt-1">Migrating content, do not close window.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </body>
+</html>
