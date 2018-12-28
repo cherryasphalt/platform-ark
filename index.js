@@ -28,14 +28,17 @@ $( document ).ready(function() {
     const arenaChannelName = document.getElementById("input_arena_channel_name").value;
 
     const arenaAuthString = 'Bearer '.concat(arenaAccessToken);
+    const arenaAuthHeader = {
+      headers: { 'Authorization': arenaAuthString }
+    };
 
     $("#loading_modal").addClass("active");
     event.preventDefault();
+    console.log(arenaAuthString);
 
     var currentOffset = 0;
     var currentPosts = [];
     const retrievePosts = function() {
-      console.log("currentOffset: " + currentOffset);
       axios.get('https://api.tumblr.com/v2/blog/' + tumblrBlogName + '/posts', {
         params: {
           api_key: tumblrApiKey,
@@ -43,14 +46,15 @@ $( document ).ready(function() {
         },
       }).then(function(response) {
         const data = response.data.response;
-        console.log(currentPosts);
         const totalPosts = data.total_posts;
         currentOffset += data.posts.length;
         currentPosts = currentPosts.concat(data.posts);
-        if (currentOffset < totalPosts) {
-          retrievePosts();
-        } else if (totalPosts > 0) {
-          startUpload();
+        if (totalPosts > 0) {
+          uploadPosts().then(function(response) {
+            if (currentOffset < totalPosts) {
+              retrievePosts();
+            }
+          });
         }
       }).catch(function (error) {
         console.log(error);
@@ -58,21 +62,55 @@ $( document ).ready(function() {
     };
 
     const startUpload = function() {
-      axios.post('https://api.are.na/v2/channels', {
-        headers: { Authorization: arenaAuthString },
-        params: {
+      return axios.post('https://cors-anywhere.herokuapp.com/https://api.are.na/v2/channels',
+        {
           title: arenaChannelName,
-          status: 'private'
-        }
-      }).then(function(response) {
-        console.log(response);
-      });
+          status: 'public'
+        },
+        arenaAuthHeader)
+        .then(function(response) {
+          console.log(response);
+        }).catch(function(error) {
+          console.log(error);
+        });
     };
 
     const uploadPosts = function () {
-
+      if (currentPosts.length > 0) {
+        const post = currentPosts.shift();
+        console.log("uploading post", post);
+        var data;
+        switch(post.type) {
+          case "text":
+            data = {
+              title: post.title,
+              description: post.source_url,
+              content: post.body
+            };
+            break;
+          case "photo":
+            data = {
+              title: post.caption,
+              description: post.source_url,
+              //source: post.photos[0].original_size.url
+              source: post.post_url
+            };
+            break;
+        }
+        return axios.post('https://cors-anywhere.herokuapp.com/https://api.are.na/v2/channels/' + arenaChannelName + '/blocks',
+          data, arenaAuthHeader)
+          .then(function(response) {
+            console.log("block response", response);
+            uploadPosts();
+          }).catch(function(error) {
+            console.log(error);
+            uploadPosts();
+          });
+      }
     };
 
-    retrievePosts();
+    startUpload().then(function(response) {
+      retrievePosts();
+    });
   });
 });
