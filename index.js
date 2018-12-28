@@ -38,6 +38,7 @@ $( document ).ready(function() {
 
     var currentOffset = 0;
     var currentPosts = [];
+    var migrationProgress = 0;
     const retrievePosts = function() {
       axios.get('https://api.tumblr.com/v2/blog/' + tumblrBlogName + '/posts', {
         params: {
@@ -50,6 +51,9 @@ $( document ).ready(function() {
         currentOffset += data.posts.length;
         currentPosts = currentPosts.concat(data.posts);
         if (totalPosts > 0) {
+          $("#progress-migration").attr("max", totalPosts);
+          $("#progress-migration").attr("value", migrationProgress);
+          $("#progress-label").text(migrationProgress + " out of " + totalPosts);
           uploadPosts().then(function(response) {
             if (currentOffset < totalPosts) {
               retrievePosts();
@@ -137,6 +141,9 @@ $( document ).ready(function() {
         return axios.post('https://cors-anywhere.herokuapp.com/https://api.are.na/v2/channels/' + arenaChannelName + '/blocks',
           data, arenaAuthHeader)
           .then(function(response) {
+            migrationProgress++;
+            $("#progress-migration").attr("value", migrationProgress);
+            $("#progress-label").text(migrationProgress + " out of " + totalPosts);
             console.log("block response", response);
             uploadPosts();
           }).catch(function(error) {

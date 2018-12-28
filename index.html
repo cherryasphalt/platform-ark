@@ -6,6 +6,7 @@
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="./index.js"></script>
     <link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre-exp.min.css">
   </head>
   <body>
     <div class="m-2">
@@ -45,12 +46,18 @@
           </div>
         </div>
         <div class="modal" id="loading_modal">
-          <div class="modal-body">
-            <div class="modal-container">
-              <div class="content mt-2">
-                <div class="loading loading-lg"></div>
-                <p class="mt-1">Migrating content, do not close window.</p>
+          <div class="modal-container">
+            <div class="modal-header">
+              <div class="modal-title h6">Migration in progress</div>
+            </div>
+            <div class="modal-body">
+              <div class="content">
+                <progress id="progress-migration" class="progress mb-2"></progress>
+                <div id="progress-label"></div>
               </div>
+            </div>
+            <div class="modal-footer">
+              <a class="btn btn-link" href="#modals-sizes" aria-label="Cancel">Cancel</a>
             </div>
           </div>
         </div>
