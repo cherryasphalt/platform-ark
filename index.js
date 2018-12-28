@@ -90,8 +90,7 @@ $( document ).ready(function() {
             break;
           case "photo":
             data = {
-              title: post.caption,
-              description: post.source_url,
+              description: post.caption,
               source: post.photos[0].original_size.url
             };
             break;
