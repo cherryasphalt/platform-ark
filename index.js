@@ -92,8 +92,46 @@ $( document ).ready(function() {
             data = {
               title: post.caption,
               description: post.source_url,
-              //source: post.photos[0].original_size.url
-              source: post.post_url
+              source: post.photos[0].original_size.url
+            };
+            break;
+          case "quote":
+            data = {
+              description: post.source,
+              content: post.text
+            };
+            break;
+          case "link":
+            data = {
+              title: post.title,
+              description: post.description,
+              source: post.url
+            };
+            break;
+          case "chat":
+            data = {
+              title: post.title,
+              description: post.source_url,
+              content: post.body
+            };
+            break;
+          case "audio":
+            data = {
+              title: post.id3_title,
+              description: post.caption,
+              content: post.player
+            };
+            break;
+          case "video":
+            data = {
+              title: post.source_title,
+              description: post.caption,
+              content: post.embed_code
+            };
+            break;
+          case "answer":
+            data = {
+              content: post.question + '\n' + post.answer
             };
             break;
         }
