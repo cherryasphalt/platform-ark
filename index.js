@@ -29,9 +29,9 @@ $( document ).ready(function() {
 
   $('#cancel-migration').click(function(event) {
     cancelMigration = true;
-  })
+  });
 
-  $('#migration_form').submit(function(event) {
+  $('#button_migrate').click(function(event) {
     const tumblrApiKey = document.getElementById('input_tumblr_api_key').value;
     const tumblrBlogName = document.getElementById('input_tumblr_blog_name').value;
     const arenaApiKey = document.getElementById('input_arena_api_key').value;
@@ -101,7 +101,7 @@ $( document ).ready(function() {
             break;
           case 'photo':
             data = {
-              description: post.caption,
+              description: generateDescription(post),
               source: post.photos[0].original_size.url
             };
             break;
@@ -170,7 +170,7 @@ $( document ).ready(function() {
     });
   });
 
-  const generateDescription = function() {
-
+  const generateDescription = function(post) {
+    return '__Post Date__\n' + post.date + '\n\n__Link__\n' + post.post_url + '\n\n__Caption__\n' + post.caption + '\n\n__Tags__\n' + post.tags + '\n\n__Source URL__\n' + post.source_url;
   };
 });
