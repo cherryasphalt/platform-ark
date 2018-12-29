@@ -2,6 +2,7 @@
   <head>
     <meta charset="utf-8">
     <title>Tumblr Arena Migration Tool ⛵️</title>
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
     <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="./index.js"></script>
@@ -11,11 +12,11 @@
   <body>
     <div class="m-2">
       <form class="form-group" id="migration_form">
-        <div class="columns mt-2 mb-2">
-          <h6 class="col-mx-auto mt-2 mb-2">Use this tool to migrate your Tumblr blog to an Arena channel.</h6>
+        <div class="columns m-2 p-2">
+          <h6 class="col-mx-auto mt-2 mb-2 p-2 p-centered">Use this tool to migrate your Tumblr blog to an Arena channel.</h6>
         </div>
         <div class="columns">
-          <div class="column col-4 col-ml-auto">
+          <div class="column col-5 col-ml-auto">
             <div class="card">
               <div class="card-body">
                 <p>Go to <a href="https://www.tumblr.com/settings/apps">https://www.tumblr.com/settings/apps</a> and create a Tumblr application and fill out the information here.</p>
@@ -26,22 +27,30 @@
               </div>
             </div>
           </div>
-          <div class="column col-4 col-mr-auto">
+          <div class="column col-5 col-mr-auto">
             <div class="card">
               <div class="card-body">
-                <p>Go to <a href="https://dev.are.na/oauth/applications">https://dev.are.na/oauth/applications</a> and create a Arena application and fill out the information here.</p>
+                <p>Go to <a href="https://dev.are.na/oauth/applications">https://dev.are.na/oauth/applications</a> and create an Arena application and fill out the information here.</p>
                 <label class="form-label" for="input_arena_api_key">Arena API Key</label>
                 <input class="form-input" type="text" id="input_arena_api_key" placeholder="Arena API Key">
                 <label class="form-label" for="input_arena_access_token">Arena Access Token</label>
                 <input class="form-input" type="text" id="input_arena_access_token" placeholder="Arena Access Token">
                 <label class="form-label" for="input_arena_channel_name">Arena Channel Name</label>
                 <input class="form-input" type="text" id="input_arena_channel_name" placeholder="Arena Channel Name">
+                <label class="form-radio">
+                  <input type="radio" name="gender" checked>
+                  <i class="form-icon"></i> Public
+                </label>
+                <label class="form-radio">
+                  <input type="radio" name="gender">
+                  <i class="form-icon"></i> Private (Non-Premium accounts have a limit of 100 private blocks, migration will fail if limit reached)
+                </label>
               </div>
             </div>
           </div>
         </div>
-        <div class="columns mt-2">
-          <div class="column col-1 col-mx-auto docs-block mt-2">
+        <div class="columns mt-2 p-2">
+          <div class="column col-1 col-mx-auto docs-block mt-2 p-2">
             <input type="submit" class="btn btn-primary input-group-btn"></input>
           </div>
         </div>
@@ -54,10 +63,11 @@
               <div class="content">
                 <progress id="progress-migration" class="progress mb-2"></progress>
                 <div id="progress-label"></div>
+                <div id="failure-label"></div>
               </div>
             </div>
             <div class="modal-footer">
-              <a class="btn btn-link" href="#modals-sizes" aria-label="Cancel">Cancel</a>
+              <button class="btn btn-link" id="cancel-migration" aria-label="Cancel">Cancel</button>
             </div>
           </div>
         </div>

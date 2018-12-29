@@ -14,31 +14,37 @@ $( document ).ready(function() {
     }
   };
 
-  $("#input_tumblr_api_key").val(getUrlParameter('tumblr_api_key'));
-  $("#input_tumblr_blog_name").val(getUrlParameter('tumblr_blog_name'));
-  $("#input_arena_api_key").val(getUrlParameter('arena_api_key'));
-  $("#input_arena_access_token").val(getUrlParameter('arena_access_token'));
-  $("#input_arena_channel_name").val(getUrlParameter('arena_channel_name'));
+  var currentOffset = 0;
+  var currentPosts = [];
+  var migrationProgress = 0;
+  var failureCount = 0;
+  var cancelMigration = false;
+  var totalPosts;
 
-  $( "#migration_form" ).submit(function( event ) {
-    const tumblrApiKey = document.getElementById("input_tumblr_api_key").value;
-    const tumblrBlogName = document.getElementById("input_tumblr_blog_name").value;
-    const arenaApiKey = document.getElementById("input_arena_api_key").value;
-    const arenaAccessToken = document.getElementById("input_arena_access_token").value;
-    const arenaChannelName = document.getElementById("input_arena_channel_name").value;
+  $('#input_tumblr_api_key').val(getUrlParameter('tumblr_api_key'));
+  $('#input_tumblr_blog_name').val(getUrlParameter('tumblr_blog_name'));
+  $('#input_arena_api_key').val(getUrlParameter('arena_api_key'));
+  $('#input_arena_access_token').val(getUrlParameter('arena_access_token'));
+  $('#input_arena_channel_name').val(getUrlParameter('arena_channel_name'));
 
-    const arenaAuthString = 'Bearer '.concat(arenaAccessToken);
+  $('#cancel-migration').click(function(event) {
+    cancelMigration = true;
+  })
+
+  $('#migration_form').submit(function(event) {
+    const tumblrApiKey = document.getElementById('input_tumblr_api_key').value;
+    const tumblrBlogName = document.getElementById('input_tumblr_blog_name').value;
+    const arenaApiKey = document.getElementById('input_arena_api_key').value;
+    const arenaAccessToken = document.getElementById('input_arena_access_token').value;
+    const arenaChannelName = document.getElementById('input_arena_channel_name').value;
+
     const arenaAuthHeader = {
-      headers: { 'Authorization': arenaAuthString }
+      headers: { 'Authorization': 'Bearer '.concat(arenaAccessToken) }
     };
 
-    $("#loading_modal").addClass("active");
+    $('#loading_modal').addClass('active');
     event.preventDefault();
-    console.log(arenaAuthString);
 
-    var currentOffset = 0;
-    var currentPosts = [];
-    var migrationProgress = 0;
     const retrievePosts = function() {
       axios.get('https://api.tumblr.com/v2/blog/' + tumblrBlogName + '/posts', {
         params: {
@@ -47,15 +53,15 @@ $( document ).ready(function() {
         },
       }).then(function(response) {
         const data = response.data.response;
-        const totalPosts = data.total_posts;
+        totalPosts = data.total_posts;
         currentOffset += data.posts.length;
         currentPosts = currentPosts.concat(data.posts);
         if (totalPosts > 0) {
-          $("#progress-migration").attr("max", totalPosts);
-          $("#progress-migration").attr("value", migrationProgress);
-          $("#progress-label").text(migrationProgress + " out of " + totalPosts);
+          $('#progress-migration').attr('max', totalPosts);
+          $('#progress-migration').attr('value', migrationProgress);
+          $('#progress-label').text(migrationProgress + ' of ' + totalPosts + ' migrated.');
           uploadPosts().then(function(response) {
-            if (currentOffset < totalPosts) {
+            if (currentOffset < totalPosts && !cancelMigration) {
               retrievePosts();
             }
           });
@@ -80,59 +86,60 @@ $( document ).ready(function() {
     };
 
     const uploadPosts = function () {
-      if (currentPosts.length > 0) {
+      if (currentPosts.length > 0 && !cancelMigration) {
         const post = currentPosts.shift();
-        console.log("uploading post", post);
+        console.log('uploading post', post);
+        console.log('cancelMigration', cancelMigration);
         var data;
         switch(post.type) {
-          case "text":
+          case 'text':
             data = {
               title: post.title,
               description: post.source_url,
               content: post.body
             };
             break;
-          case "photo":
+          case 'photo':
             data = {
               description: post.caption,
               source: post.photos[0].original_size.url
             };
             break;
-          case "quote":
+          case 'quote':
             data = {
               description: post.source,
               content: post.text
             };
             break;
-          case "link":
+          case 'link':
             data = {
               title: post.title,
               description: post.description,
               source: post.url
             };
             break;
-          case "chat":
+          case 'chat':
             data = {
               title: post.title,
               description: post.source_url,
               content: post.body
             };
             break;
-          case "audio":
+          case 'audio':
             data = {
               title: post.id3_title,
               description: post.caption,
               content: post.player
             };
             break;
-          case "video":
+          case 'video':
             data = {
               title: post.source_title,
               description: post.caption,
               content: post.embed_code
             };
             break;
-          case "answer":
+          case 'answer':
             data = {
               content: post.question + '\n' + post.answer
             };
@@ -142,14 +149,19 @@ $( document ).ready(function() {
           data, arenaAuthHeader)
           .then(function(response) {
             migrationProgress++;
-            $("#progress-migration").attr("value", migrationProgress);
-            $("#progress-label").text(migrationProgress + " out of " + totalPosts);
-            console.log("block response", response);
+            $('#progress-migration').attr('value', migrationProgress);
+            $('#progress-label').text(migrationProgress + ' of ' + totalPosts + ' migrated.');
             uploadPosts();
           }).catch(function(error) {
             console.log(error);
+            failureCount++;
+            $('#failure-label').text(failureCount + ' failed.');
             uploadPosts();
           });
+      } else {
+        return new Promise(function(resolve, reject) {
+            resolve({});
+        });
       }
     };
 
@@ -157,4 +169,8 @@ $( document ).ready(function() {
       retrievePosts();
     });
   });
+
+  const generateDescription = function() {
+    
+  };
 });
