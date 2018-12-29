@@ -37,6 +37,7 @@ $( document ).ready(function() {
     const arenaApiKey = document.getElementById('input_arena_api_key').value;
     const arenaAccessToken = document.getElementById('input_arena_access_token').value;
     const arenaChannelName = document.getElementById('input_arena_channel_name').value;
+    const arenaVisibility = $('input[name=arena_visibility]:checked').val();
 
     const arenaAuthHeader = {
       headers: { 'Authorization': 'Bearer '.concat(arenaAccessToken) }
@@ -75,7 +76,7 @@ $( document ).ready(function() {
       return axios.post('https://cors-anywhere.herokuapp.com/https://api.are.na/v2/channels',
         {
           title: arenaChannelName,
-          status: 'public'
+          status: arenaVisibility
         },
         arenaAuthHeader)
         .then(function(response) {
@@ -89,7 +90,6 @@ $( document ).ready(function() {
       if (currentPosts.length > 0 && !cancelMigration) {
         const post = currentPosts.shift();
         console.log('uploading post', post);
-        console.log('cancelMigration', cancelMigration);
         var data;
         switch(post.type) {
           case 'text':
@@ -171,6 +171,6 @@ $( document ).ready(function() {
   });
 
   const generateDescription = function() {
-    
+
   };
 });
