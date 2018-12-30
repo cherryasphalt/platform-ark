@@ -99,7 +99,7 @@ $( document ).ready(function() {
           case 'text':
             data = {
               title: post.title,
-              description: post.source_url,
+              description: generateDescription(post),
               content: post.body
             };
             break;
@@ -111,21 +111,21 @@ $( document ).ready(function() {
             break;
           case 'quote':
             data = {
-              description: post.source,
+              description: generateDescription(post),
               content: post.text
             };
             break;
           case 'link':
             data = {
               title: post.title,
-              description: post.description,
+              description: generateDescription(post),
               source: post.url
             };
             break;
           case 'chat':
             data = {
               title: post.title,
-              description: post.source_url,
+              description: generateDescription(post),
               content: post.body
             };
             break;
@@ -145,7 +145,8 @@ $( document ).ready(function() {
             break;
           case 'answer':
             data = {
-              content: post.question + '\n' + post.answer
+              description: generateDescription(post),
+              content: '>' + post.question + '\n\n' + post.answer
             };
             break;
         }
@@ -175,6 +176,16 @@ $( document ).ready(function() {
   });
 
   const generateDescription = function(post) {
-    return '__Post Date__\n' + post.date + '\n\n__Link__\n' + post.post_url + '\n\n__Caption__\n' + post.caption + '\n\n__Tags__\n' + post.tags.join(', ') + '\n\n__Source URL__\n' + post.source_url;
+    var description = '__Post Date__\n' + post.date + '\n\n__Link__\n' + post.post_url;
+    if (post.hasOwnProperty('caption'))
+      description += '\n\n__Caption__\n' + post.caption;
+    if (post.hasOwnProperty('description'))
+      description += '\n\n__Description__\n' + post.description;
+    if (post.hasOwnProperty('source'))
+      description += '\n\n__Source__\n' + post.source;
+    if (post.hasOwnProperty('source_url'))
+      description += '\n\n__Source URL__\n' + post.source_url;
+    description += '\n\n__Tags__\n' + post.tags.join(', ');
+    return description;
   };
 });
