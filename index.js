@@ -28,12 +28,15 @@ $( document ).ready(function() {
   $('#input_arena_channel_name').val(getUrlParameter('arena_channel_name'));
 
   $('#cancel-migration').click(function(event) {
+    event.preventDefault();
     cancelMigration = true;
   });
 
   $('#button_migrate').click(function(event) {
+    event.preventDefault();
     const tumblrApiKey = document.getElementById('input_tumblr_api_key').value;
     const tumblrBlogName = document.getElementById('input_tumblr_blog_name').value;
+    const tumblrPostType = $('#tumblr-post-type').val();
     const arenaApiKey = document.getElementById('input_arena_api_key').value;
     const arenaAccessToken = document.getElementById('input_arena_access_token').value;
     const arenaChannelName = document.getElementById('input_arena_channel_name').value;
@@ -50,6 +53,7 @@ $( document ).ready(function() {
       axios.get('https://api.tumblr.com/v2/blog/' + tumblrBlogName + '/posts', {
         params: {
           api_key: tumblrApiKey,
+          type: (tumblrPostType !== 'all' ? tumblrPostType : undefined),
           offset: currentOffset
         },
       }).then(function(response) {
@@ -128,15 +132,15 @@ $( document ).ready(function() {
           case 'audio':
             data = {
               title: post.id3_title,
-              description: post.caption,
-              content: post.player
+              description: generateDescription(post),
+              source: post.player
             };
             break;
           case 'video':
             data = {
               title: post.source_title,
-              description: post.caption,
-              content: post.embed_code
+              description: generateDescription(post),
+              source: post.embed_code
             };
             break;
           case 'answer':
@@ -171,6 +175,6 @@ $( document ).ready(function() {
   });
 
   const generateDescription = function(post) {
-    return '__Post Date__\n' + post.date + '\n\n__Link__\n' + post.post_url + '\n\n__Caption__\n' + post.caption + '\n\n__Tags__\n' + post.tags + '\n\n__Source URL__\n' + post.source_url;
+    return '__Post Date__\n' + post.date + '\n\n__Link__\n' + post.post_url + '\n\n__Caption__\n' + post.caption + '\n\n__Tags__\n' + post.tags.join(', ') + '\n\n__Source URL__\n' + post.source_url;
   };
 });
