@@ -96,6 +96,13 @@ $( document ).ready(function() {
         console.log('uploading post', post);
         var data;
         switch(post.type) {
+          case 'photoExpanded':
+            console.log("split photos post", post);
+            data = {
+              description: generateDescription(post),
+              source: post.singlePhoto.original_size.url
+            };
+            break;
           case 'text':
             data = {
               title: post.title,
@@ -104,10 +111,22 @@ $( document ).ready(function() {
             };
             break;
           case 'photo':
-            data = {
-              description: generateDescription(post),
-              source: post.photos[0].original_size.url
-            };
+            if (post.photos.length > 1) {
+              console.log("splitting photos post");
+              for (i = post.photos.length - 1; i >= 0; i--) {
+                const newPost = Object.assign({}, post);
+                newPost.type = 'photoExpanded';
+                newPost.singlePhoto = post.photos[i];
+                newPost.currentPhotoCount = i + 1;
+                currentPosts.unshift(newPost);
+              }
+              return uploadPosts();
+            } else {
+              data = {
+                description: generateDescription(post),
+                source: post.photos[0].original_size.url
+              };
+            }
             break;
           case 'quote':
             data = {
@@ -177,6 +196,8 @@ $( document ).ready(function() {
 
   const generateDescription = function(post) {
     var description = '__Post Date__\n' + post.date + '\n\n__Link__\n' + post.post_url;
+    if (post.hasOwnProperty('currentPhotoCount') && post.photos.length > 1)
+      description += '\n\n__Photo ' + post.currentPhotoCount + ' of ' + post.photos.length + '__\n';
     if (post.hasOwnProperty('caption'))
       description += '\n\n__Caption__\n' + post.caption;
     if (post.hasOwnProperty('description'))
