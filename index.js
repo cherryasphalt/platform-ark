@@ -197,7 +197,7 @@ $( document ).ready(function() {
   const generateDescription = function(post) {
     var description = '__Post Date__\n' + post.date + '\n\n__Link__\n' + post.post_url;
     if (post.hasOwnProperty('currentPhotoCount') && post.photos.length > 1)
-      description += '\n\n__Photo ' + post.currentPhotoCount + ' of ' + post.photos.length + '__\n';
+      description += '\n\n__Image ' + post.currentPhotoCount + ' of ' + post.photos.length + '__\n';
     if (post.hasOwnProperty('caption'))
       description += '\n\n__Caption__\n' + post.caption;
     if (post.hasOwnProperty('description'))
