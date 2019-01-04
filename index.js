@@ -113,7 +113,7 @@ $( document ).ready(function() {
           case 'photo':
             if (post.photos.length > 1) {
               console.log("splitting photos post");
-              for (i = post.photos.length - 1; i >= 0; i--) {
+              for (i = 0; i < post.photos.length; i++) {
                 const newPost = Object.assign({}, post);
                 newPost.type = 'photoExpanded';
                 newPost.singlePhoto = post.photos[i];
