@@ -63,6 +63,7 @@ $( document ).ready(function() {
         params: {
           api_key: tumblrApiKey,
           type: (tumblrPostType !== 'all' ? tumblrPostType : undefined),
+          limit: 50,
           offset: currentOffset
         },
       }).then(function(response) {
