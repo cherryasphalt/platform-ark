@@ -75,11 +75,12 @@ $( document ).ready(function() {
           $('#progress-migration').attr('max', totalPosts);
           $('#progress-migration').attr('value', migrationProgress);
           $('#progress-label').text(migrationProgress + ' of ' + totalPosts + ' migrated.');
-          uploadPosts().then(function(response) {
-            if (currentOffset < totalPosts && !cancelMigration) {
-              retrievePosts();
-            }
-          });
+          if (currentOffset < totalPosts && !cancelMigration) {
+            retrievePosts();
+          } else if (currentOffset >= totalPosts) {
+            currentPosts = currentPosts.reverse();
+            uploadPosts();
+          }
         }
       }).catch(function (error) {
         console.log(error);
@@ -93,9 +94,7 @@ $( document ).ready(function() {
           status: arenaVisibility
         },
         arenaAuthHeader)
-        .then(function(response) {
-          console.log(response);
-        }).catch(function(error) {
+        .catch(function(error) {
           console.log(error);
         });
     };
@@ -168,8 +167,10 @@ $( document ).ready(function() {
             data = {
               title: post.summary,
               description: generateDescription(post),
-              source: post.permalink_url
+              source: post.post_url
             };
+            if (post.hasOwnProperty('permalink_url'))
+              data.source = post.permalink_url;
             if (post.hasOwnProperty('video_url'))
               data.source = post.video_url;
             break;
