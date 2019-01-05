@@ -14,11 +14,11 @@ $( document ).ready(function() {
     }
   };
 
-  var currentOffset = 0;
-  var currentPosts = [];
-  var migrationProgress = 0;
-  var failureCount = 0;
-  var cancelMigration = false;
+  var currentOffset;
+  var currentPosts;
+  var migrationProgres;
+  var failureCount;
+  var cancelMigration;
   var totalPosts;
 
   $('#input_tumblr_api_key').val(getUrlParameter('tumblr_api_key'));
@@ -36,12 +36,20 @@ $( document ).ready(function() {
   $('#button_migrate').click(function(event) {
     event.preventDefault();
     cancelMigration = false;
-    const tumblrApiKey = document.getElementById('input_tumblr_api_key').value;
-    const tumblrBlogName = document.getElementById('input_tumblr_blog_name').value;
+    currentOffset = 0;
+    currentPosts = [];
+    migrationProgress = 0;
+    failureCount = 0;
+    $('#progress-migration').attr('max', 1);
+    $('#progress-migration').removeAttr('value');
+    $('#progress-label').text('');
+
+    const tumblrApiKey = $('#input_tumblr_api_key').val();
+    const tumblrBlogName = $('#input_tumblr_blog_name').val();
     const tumblrPostType = $('#tumblr-post-type').val();
-    const arenaApiKey = document.getElementById('input_arena_api_key').value;
-    const arenaAccessToken = document.getElementById('input_arena_access_token').value;
-    const arenaChannelName = document.getElementById('input_arena_channel_name').value;
+    const arenaApiKey = $('#input_arena_api_key').val();
+    const arenaAccessToken = $('#input_arena_access_token').val();
+    const arenaChannelName = $('#input_arena_channel_name').val();
     const arenaVisibility = $('input[name=arena_visibility]:checked').val();
 
     const arenaAuthHeader = {
@@ -49,7 +57,6 @@ $( document ).ready(function() {
     };
 
     $('#loading_modal').addClass('active');
-    event.preventDefault();
 
     const retrievePosts = function() {
       axios.get('https://api.tumblr.com/v2/blog/' + tumblrBlogName + '/posts', {
