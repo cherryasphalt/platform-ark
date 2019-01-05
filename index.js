@@ -171,6 +171,12 @@ $( document ).ready(function() {
               content: '>' + post.question + '\n\n' + post.answer
             };
             break;
+          case 'blocks':
+            data = {
+              description: generateDescription(post),
+              content: post.content
+            }
+            break;
         }
         return axios.post('https://cors-anywhere.herokuapp.com/https://api.are.na/v2/channels/' + arenaChannelName + '/blocks',
           data, arenaAuthHeader)
