@@ -30,10 +30,12 @@ $( document ).ready(function() {
   $('#cancel-migration').click(function(event) {
     event.preventDefault();
     cancelMigration = true;
+    $('#loading_modal').removeClass('active');
   });
 
   $('#button_migrate').click(function(event) {
     event.preventDefault();
+    cancelMigration = false;
     const tumblrApiKey = document.getElementById('input_tumblr_api_key').value;
     const tumblrBlogName = document.getElementById('input_tumblr_blog_name').value;
     const tumblrPostType = $('#tumblr-post-type').val();
@@ -112,7 +114,6 @@ $( document ).ready(function() {
             break;
           case 'photo':
             if (post.photos.length > 1) {
-              console.log("splitting photos post");
               for (i = 0; i < post.photos.length; i++) {
                 const newPost = Object.assign({}, post);
                 newPost.type = 'photoExpanded';
@@ -150,17 +151,19 @@ $( document ).ready(function() {
             break;
           case 'audio':
             data = {
-              title: post.id3_title,
+              title: post.summary,
               description: generateDescription(post),
-              source: post.player
+              source: post.audio_source_url
             };
             break;
           case 'video':
             data = {
-              title: post.source_title,
+              title: post.summary,
               description: generateDescription(post),
-              source: post.embed_code
+              source: post.permalink_url
             };
+            if (post.hasOwnProperty('video_url'))
+              data.source = post.video_url;
             break;
           case 'answer':
             data = {
