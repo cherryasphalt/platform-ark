@@ -22,9 +22,9 @@
                 <div class="card-title h5">Tumblr Import</div>
               </div>
               <div class="card-body">
-                <p>Go to <a href="https://www.tumblr.com/settings/apps">https://www.tumblr.com/settings/apps</a> and create a Tumblr application and fill out the information here.</p>
-                <label class="form-label" for="input_tumblr_api_key">Tumblr API Key</label>
-                <input class="form-input" type="text" id="input_tumblr_api_key" placeholder="Tumblr API Key">
+                <p>Go to <a href="https://www.tumblr.com/settings/apps">https://www.tumblr.com/settings/apps</a> and create a Tumblr application and fill out the information here. ("Default callback URL" can be anything in this case.)</p>
+                <label class="form-label" for="input_tumblr_api_key">OAuth Consumer Key</label>
+                <input class="form-input" type="text" id="input_tumblr_api_key" placeholder="OAuth Consumer Key">
                 <label class="form-label" for="input_tumblr_blog_name">Tumblr Blog Name</label>
                 <input class="form-input" type="text" id="input_tumblr_blog_name" placeholder="Tumblr Blog Name">
                 <label class="form-label">Post Type</label>
@@ -47,11 +47,11 @@
                 <div class="card-title h5">Arena Export</div>
               </div>
               <div class="card-body">
-                <p>Go to <a href="https://dev.are.na/oauth/applications">https://dev.are.na/oauth/applications</a> and create an Arena application and fill out the information here.</p>
-                <label class="form-label" for="input_arena_api_key">Arena API Key</label>
-                <input class="form-input" type="text" id="input_arena_api_key" placeholder="Arena API Key">
-                <label class="form-label" for="input_arena_access_token">Arena Access Token</label>
-                <input class="form-input" type="text" id="input_arena_access_token" placeholder="Arena Access Token">
+                <p>Go to <a href="https://dev.are.na/oauth/applications">https://dev.are.na/oauth/applications</a> and create an Arena application and fill out the information here. ("Redirect URI" can be anything in this case.)</p>
+                <label class="form-label" for="input_arena_api_key">Application ID</label>
+                <input class="form-input" type="text" id="input_arena_api_key" placeholder="Application ID">
+                <label class="form-label" for="input_arena_access_token">Personal Access Token</label>
+                <input class="form-input" type="text" id="input_arena_access_token" placeholder="Personal Access Token">
                 <label class="form-label" for="input_arena_channel_name">Arena Channel Name</label>
                 <input class="form-input" type="text" id="input_arena_channel_name" placeholder="Arena Channel Name">
                 <label class="form-radio">
@@ -68,7 +68,7 @@
         </div>
         <div class="columns mt-2 p-2">
           <div class="column col-1 col-mx-auto docs-block mt-2 p-2">
-            <button id="button_migrate" class="btn btn-primary input-group-btn">Submit</button>
+            <button id="button_migrate" class="btn btn-primary input-group-btn">Migrate</button>
           </div>
         </div>
         <div class="columns mt-2 p-2">
@@ -78,7 +78,10 @@
                 <div class="panel-title">Notes</div>
               </div>
               <div class="panel-body">
-                <p>• "Neue Post Format (NPF) Posts" format currently not supported.</p>
+                <ul>
+                  <li>"Neue Post Format (NPF) Posts" format currently not supported.</li>
+                  <li>Private Tumblr blogs currently not supported.</li>
+                </ul>
               </div>
             </div>
           </div>
