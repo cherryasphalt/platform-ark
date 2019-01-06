@@ -190,7 +190,8 @@ $( document ).ready(function() {
         return axios.post('https://cors-anywhere.herokuapp.com/https://api.are.na/v2/channels/' + arenaChannelName + '/blocks',
           data, arenaAuthHeader)
           .then(function(response) {
-            migrationProgress++;
+            if (post.type !== "photoExpanded" || (post.type == "photoExpanded" && post.currentPhotoCount === post.photos.length))
+              migrationProgress++;
             $('#progress-migration').attr('value', migrationProgress);
             $('#progress-label').text(migrationProgress + ' of ' + totalPosts + ' migrated.');
             uploadPosts();
@@ -201,6 +202,7 @@ $( document ).ready(function() {
             uploadPosts();
           });
       } else {
+        $('#cancel-migration').text("Finish");
         return new Promise(function(resolve, reject) {
             resolve({});
         });
