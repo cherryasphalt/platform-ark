@@ -95,7 +95,15 @@
               <div class="content">
                 <progress id="progress-migration" class="progress mb-2"></progress>
                 <div id="progress-label"></div>
-                <div id="failure-label"></div>
+                <div class="accordion">
+                  <input type="checkbox" id="accordion-1" name="accordion-checkbox" hidden>
+                  <label id="failure-label" class="accordion-header" for="accordion-1">
+                    <i class="icon icon-arrow-right mr-1"></i>
+                  </label>
+                  <div class="accordion-body">
+                    <!-- Accordions content -->
+                  </div>
+                </div>
               </div>
             </div>
             <div class="modal-footer">
