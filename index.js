@@ -56,6 +56,8 @@ $( document ).ready(function() {
       headers: { 'Authorization': 'Bearer '.concat(arenaAccessToken) }
     };
 
+    var generatedArenaChannelName;
+
     $('#loading_modal').addClass('active');
 
     const retrievePosts = function() {
@@ -94,7 +96,9 @@ $( document ).ready(function() {
           status: arenaVisibility
         },
         arenaAuthHeader)
-        .catch(function(error) {
+        .then(function(response) {
+          generatedArenaChannelName = response.data.slug;
+        }).catch(function(error) {
           console.log(error);
         });
     };
@@ -187,7 +191,7 @@ $( document ).ready(function() {
             }
             break;
         }
-        return axios.post('https://cors-anywhere.herokuapp.com/https://api.are.na/v2/channels/' + arenaChannelName + '/blocks',
+        return axios.post('https://cors-anywhere.herokuapp.com/https://api.are.na/v2/channels/' + generatedArenaChannelName + '/blocks',
           data, arenaAuthHeader)
           .then(function(response) {
             if (post.type !== "photoExpanded" || (post.type == "photoExpanded" && post.currentPhotoCount === post.photos.length))
