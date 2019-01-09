@@ -110,7 +110,6 @@ $( document ).ready(function() {
         var data;
         switch(post.type) {
           case 'photoExpanded':
-            console.log("split photos post", post);
             data = {
               description: generateDescription(post),
               source: post.singlePhoto.original_size.url
