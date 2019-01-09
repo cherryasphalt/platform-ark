@@ -197,12 +197,16 @@ $( document ).ready(function() {
               migrationProgress++;
             $('#progress-migration').attr('value', migrationProgress);
             $('#progress-label').text(migrationProgress + ' of ' + totalPosts + ' migrated.');
-            uploadPosts();
+            
+            // Sleep for 5 seconds to avoid hammering Are.na API
+            sleep(5000).then(() => uploadPosts());
           }).catch(function(error) {
             console.log(error);
             failureCount++;
             $('#failure-label').text(failureCount + ' failed.');
-            uploadPosts();
+            
+            // Sleep for 5 seconds to avoid hammering Are.na API
+            sleep(5000).then(() => uploadPosts());
           });
       } else {
         $('#cancel-migration').text("Finish");
@@ -232,4 +236,8 @@ $( document ).ready(function() {
     description += '\n\n__Tags__\n' + post.tags.join(', ');
     return description;
   };
+
+  const sleep = (ms) => {
+    return new Promise((resolve) => setTimeout(resolve, ms))
+  }
 });
