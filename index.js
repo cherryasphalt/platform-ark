@@ -90,7 +90,7 @@ $( document ).ready(function() {
     };
 
     const startUpload = function() {
-      return axios.post('https://cors-anywhere.herokuapp.com/https://api.are.na/v2/channels',
+      return axios.post('https://cors-arena.herokuapp.com/https://api.are.na/v2/channels',
         {
           title: arenaChannelName,
           status: arenaVisibility
@@ -190,7 +190,7 @@ $( document ).ready(function() {
             }
             break;
         }
-        return axios.post('https://cors-anywhere.herokuapp.com/https://api.are.na/v2/channels/' + generatedArenaChannelName + '/blocks',
+        return axios.post('https://cors-arena.herokuapp.com/https://api.are.na/v2/channels/' + generatedArenaChannelName + '/blocks',
           data, arenaAuthHeader)
           .then(function(response) {
             if (post.type !== "photoExpanded" || (post.type == "photoExpanded" && post.currentPhotoCount === post.photos.length))
