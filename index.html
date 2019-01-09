@@ -5,6 +5,7 @@
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre.min.css">
     <link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre-exp.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre-icons.min.css">
     <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="./index.js"></script>
@@ -13,7 +14,7 @@
     <div class="m-2">
       <form class="form-group" id="migration_form">
         <div class="columns m-2 p-2">
-          <h5 class="col-mx-auto mt-2 mb-2 p-2 p-centered">Migrate your Tumblr blog to an Arena channel.</h5>
+          <h5 class="col-mx-auto mt-2 mb-2 p-2 p-centered">Copy your Tumblr blog to an Arena channel.</h5>
         </div>
         <div class="columns">
           <div class="column col-5 col-ml-auto">
@@ -22,7 +23,7 @@
                 <div class="card-title h5">Tumblr Import</div>
               </div>
               <div class="card-body">
-                <p>Go to <a href="https://www.tumblr.com/settings/apps">https://www.tumblr.com/settings/apps</a> and create a Tumblr application and fill out the information here. ("Default callback URL" can be anything in this case.)</p>
+                <p>Go to <a href="https://www.tumblr.com/settings/apps">https://www.tumblr.com/settings/apps</a> and create a Tumblr application and fill out the information here. ("Default callback URL" can be anything in this case.) Original blog will not be modified.</p>
                 <label class="form-label" for="input_tumblr_api_key">OAuth Consumer Key</label>
                 <input class="form-input" type="text" id="input_tumblr_api_key" placeholder="OAuth Consumer Key">
                 <label class="form-label" for="input_tumblr_blog_name">Tumblr Blog Name</label>
@@ -95,15 +96,7 @@
               <div class="content">
                 <progress id="progress-migration" class="progress mb-2"></progress>
                 <div id="progress-label"></div>
-                <div class="accordion">
-                  <input type="checkbox" id="accordion-1" name="accordion-checkbox" hidden>
-                  <label id="failure-label" class="accordion-header" for="accordion-1">
-                    <i class="icon icon-arrow-right mr-1"></i>
-                  </label>
-                  <div class="accordion-body">
-                    <!-- Accordions content -->
-                  </div>
-                </div>
+                <div id="failure-label"></div>
               </div>
             </div>
             <div class="modal-footer">
